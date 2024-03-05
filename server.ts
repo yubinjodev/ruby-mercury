@@ -1,10 +1,11 @@
+import dotenv from 'dotenv'
 import app from './src/app'
 
-const port = 3000
+dotenv.config()
 
 app
-  .listen(port, 'localhost', () => {
-    console.info(`ruby-mercury server is live and running on http://localhost:${port}`)
+  .listen(Number(process.env.PORT), 'localhost', () => {
+    console.info(`ruby-mercury server is live and running on http://localhost:${process.env.PORT}`)
   })
   .on('error', (err: any) => {
     if (err.code === 'EADDRINUSE') {
