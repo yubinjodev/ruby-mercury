@@ -7,13 +7,13 @@ dotenv.config()
 const router = Router()
 const connection = mysql.createConnection(process.env.DATABASE_URL as string)
 
-router.get('/', (req, res) => {
-  connection.connect((err) => {
-    if (err) {
-      return console.error('Error connecting to the database:', err)
-    }
-  })
+connection.connect((err) => {
+  if (err) {
+    console.error('Error connecting to the database:', err)
+  }
+})
 
+router.get('/', (req, res) => {
   const query = 'SELECT * FROM procedures'
 
   connection.query(query, (err, results) => {
@@ -29,8 +29,30 @@ router.get('/', (req, res) => {
       message: 'Procedures have been successfully fetched.',
       data: results,
     })
+  })
+})
 
-    connection.end()
+router.get('/:id', (req, res) => {
+  const { id } = req.params
+
+  const query = `
+  SELECT * FROM procedures 
+  WHERE procedure_id=${id}
+  `
+
+  connection.query(query, (err, results) => {
+    if (err) {
+      res.status(500).json({
+        status: 'error',
+        message: err.message || 'Server error has occurred.',
+        data: null,
+      })
+    }
+    res.status(200).json({
+      status: 'success',
+      message: 'Procedures have been successfully fetched.',
+      data: results,
+    })
   })
 })
 
