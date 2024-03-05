@@ -1,11 +1,10 @@
 import dotenv from 'dotenv'
+import { Router } from 'express'
 import mysql from 'mysql2'
-// import { router } from '../app'
-import express, { Router } from 'express'
 
 dotenv.config()
 
-export const router = Router()
+const router = Router()
 const connection = mysql.createConnection(process.env.DATABASE_URL as string)
 
 router.get('/', (req, res) => {
