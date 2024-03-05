@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 import express, { Router } from 'express'
-import procedures from './routes/procedures'
+import proceduresRouter from './routes/procedures'
 
 dotenv.config()
 
@@ -9,6 +9,6 @@ const router = Router()
 
 app.use('/api/v1', router)
 
-app.use('/procedures', procedures)
+router.use('/procedures', proceduresRouter)
 
 export default app
