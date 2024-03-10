@@ -1,11 +1,6 @@
 import { Request, Response } from 'express'
 import { queryDatabase } from '../lib/sql/queryDatabase'
 
-// POST (create account)
-// GET (see profile)
-// PUT/PATCH (update profile)
-// DELETE (delete profile)
-
 export const createStylistAccount = async (req: Request, res: Response) => {
   const { firstName, lastName, phoneNumber, dob, streetAddress, city, country, postalCode } = req.body
 
