@@ -1,38 +1,31 @@
-import dotenv from 'dotenv'
 import { Router } from 'express'
-import mysql from 'mysql2'
-
-dotenv.config()
+import { queryDatabase } from '../lib/sql/queryDatabase'
 
 const router = Router()
-const connection = mysql.createConnection(process.env.DATABASE_URL as string)
 
-connection.connect((err) => {
-  if (err) {
-    console.error('Error connecting to the database:', err)
+router.get('/', async (req, res) => {
+  const query = 'SELECT * FROM procedures'
+
+  try {
+    const results = await queryDatabase(query)
+
+    if (results) {
+      res.status(200).json({
+        status: 'success',
+        message: 'The procedures have been fetched successfully.',
+        data: results,
+      })
+    }
+  } catch (err) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Server error occurred.',
+      data: err,
+    })
   }
 })
 
-router.get('/', (req, res) => {
-  const query = 'SELECT * FROM procedures'
-
-  connection.query(query, (err, results) => {
-    if (err) {
-      res.status(500).json({
-        status: 'error',
-        message: err.message || 'Server error has occurred.',
-        data: null,
-      })
-    }
-    res.status(200).json({
-      status: 'success',
-      message: 'Procedures have been successfully fetched.',
-      data: results,
-    })
-  })
-})
-
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   const { id } = req.params
 
   const query = `
@@ -40,20 +33,23 @@ router.get('/:id', (req, res) => {
   WHERE procedure_id=${id}
   `
 
-  connection.query(query, (err, results) => {
-    if (err) {
-      res.status(500).json({
-        status: 'error',
-        message: err.message || 'Server error has occurred.',
-        data: null,
+  try {
+    const results = await queryDatabase(query)
+
+    if (results) {
+      res.status(200).json({
+        status: 'success',
+        message: 'The procedure has been fetched successfully.',
+        data: results || 'poo',
       })
     }
-    res.status(200).json({
-      status: 'success',
-      message: 'Procedures have been successfully fetched.',
-      data: results,
+  } catch (err) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Server error occurred.',
+      data: err,
     })
-  })
+  }
 })
 
 export default router
