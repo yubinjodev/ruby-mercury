@@ -38,7 +38,7 @@ export const getProcedure = async (req: Request, res: Response) => {
       res.status(200).json({
         status: 'success',
         message: 'The procedure has been fetched successfully.',
-        data: results || 'poo',
+        data: results,
       })
     }
   } catch (err) {

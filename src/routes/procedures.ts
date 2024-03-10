@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { getProcedure, getProcedures } from '../controllers/procedureController'
+import { getProcedure, getProcedures } from '../controllers'
 
 const router = Router()
 
