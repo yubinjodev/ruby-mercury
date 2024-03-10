@@ -1,55 +1,10 @@
 import { Router } from 'express'
-import { queryDatabase } from '../lib/sql/queryDatabase'
+import { getProcedure, getProcedures } from '../controllers/procedureController'
 
 const router = Router()
 
-router.get('/', async (req, res) => {
-  const query = 'SELECT * FROM procedures'
+router.get('/', getProcedures)
 
-  try {
-    const results = await queryDatabase(query)
-
-    if (results) {
-      res.status(200).json({
-        status: 'success',
-        message: 'The procedures have been fetched successfully.',
-        data: results,
-      })
-    }
-  } catch (err) {
-    res.status(500).json({
-      status: 'error',
-      message: 'Server error occurred.',
-      data: err,
-    })
-  }
-})
-
-router.get('/:id', async (req, res) => {
-  const { id } = req.params
-
-  const query = `
-  SELECT * FROM procedures 
-  WHERE procedure_id=${id}
-  `
-
-  try {
-    const results = await queryDatabase(query)
-
-    if (results) {
-      res.status(200).json({
-        status: 'success',
-        message: 'The procedure has been fetched successfully.',
-        data: results || 'poo',
-      })
-    }
-  } catch (err) {
-    res.status(500).json({
-      status: 'error',
-      message: 'Server error occurred.',
-      data: err,
-    })
-  }
-})
+router.get('/:id', getProcedure)
 
 export default router
