@@ -65,3 +65,6 @@ Thumbs.db
 
 # Next.js build output
 .next
+
+# Build folder
+/build/
